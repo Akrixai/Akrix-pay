@@ -1,3 +1,4 @@
+// @ts-ignore: No type definitions for nodemailer
 import nodemailer from 'nodemailer';
 
 const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
@@ -51,6 +52,7 @@ export async function sendPaymentNotificationToAkrix(clientName: string, clientE
 }
 
 export async function sendPaymentReminderEmail(clientEmail: string, clientName: string, amount: number, message: string) {
+  const logoUrl = 'https://akrixai-pay.netlify.app/akrix-logo.png';
   const mailOptions = {
     from: smtpUser,
     to: clientEmail,
@@ -58,7 +60,7 @@ export async function sendPaymentReminderEmail(clientEmail: string, clientName: 
     html: `
       <div style="font-family: Arial, sans-serif; background: #f8fafc; padding: 32px; border-radius: 16px; max-width: 500px; margin: auto;">
         <div style="text-align: center; margin-bottom: 24px;">
-          <img src='https://akrixai-pay.netlify.app/akrix-logo.png' alt='Akrix Logo' style='height: 48px; margin-bottom: 8px;' />
+          <img src='${logoUrl}' alt='Akrix Logo' style='height: 48px; margin-bottom: 8px;' />
           <h2 style="color: #4f46e5; margin: 0;">Akrix Payment Reminder</h2>
         </div>
         <p style="font-size: 16px; color: #222;">Dear <b>${clientName}</b>,</p>
