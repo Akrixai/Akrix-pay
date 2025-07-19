@@ -1,0 +1,21 @@
+body {
+  background: #fff;
+  color: #000;
+}
+
+/* Ensure all text is black by default for user pages */
+.text-black, .text-gray-900, .text-gray-800, .text-gray-700, .text-gray-600, .text-gray-500 {
+  color: #000 !important;
+}
+
+.bg-white {
+  background: #fff !important;
+}
+
+/* Responsive utility (if needed) */
+@media (max-width: 640px) {
+  .responsive-container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+} 
