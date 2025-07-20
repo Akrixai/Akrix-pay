@@ -52,6 +52,12 @@ export default function AdminDashboard() {
                 <span className="font-bold text-lg text-yellow-700">Direct Receipt Generation</span>
               </div>
             </Link>
+            <Link href="/admin/qr-payments">
+              <div className="cursor-pointer bg-white/80 border border-indigo-200 rounded-2xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-all duration-200">
+                <span className="text-4xl mb-2">🔗 QR</span>
+                <span className="font-bold text-lg text-indigo-700">QR Payments</span>
+              </div>
+            </Link>
           </div>
         </div>
       </div>

@@ -44,8 +44,8 @@ export default function CustomerPaymentsPage() {
           {/* Card Payment */}
           <div className="bg-white border rounded-2xl shadow p-8 flex flex-col items-center">
             <div className="text-5xl mb-4">💳</div>
-            <h2 className="text-xl font-bold mb-2 text-black">Card Payment</h2>
-            <p className="text-black mb-6 text-center">Pay securely with your credit or debit card using Razorpay</p>
+            <h2 className="text-xl font-bold mb-2 text-black">Online Payment</h2>
+            <p className="text-black mb-6 text-center">Pay securely with Anything using Razorpay</p>
             <Link href="/online-payment">
               <button className="bg-gradient-to-r from-blue-600 to-purple-500 text-white px-6 py-3 rounded-lg font-bold text-lg hover:from-blue-700 hover:to-purple-600 transition">Online Payment</button>
             </Link>

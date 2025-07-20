@@ -71,7 +71,7 @@ export async function sendPaymentReminderEmail(clientEmail: string, clientName: 
         <p style="font-size: 15px; color: #444;">If you have already made the payment, please ignore this message.</p>
         <p style="font-size: 15px; color: #444;">Thank you for choosing <b>Akrix</b>.<br>- Akrix Team</p>
         <div style="text-align: center; margin-top: 24px;">
-          <a href="https://akrix.ai" style="background: #4f46e5; color: #fff; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">Pay Now</a>
+          <a href="https://akrixai-pay.netlify.app/qr-pay" style="background: #4f46e5; color: #fff; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">Pay Now</a>
         </div>
       </div>
     `,
