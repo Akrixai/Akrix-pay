@@ -3,11 +3,15 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 export default function CustomerPaymentsPage() {
   const [mobile, setMobile] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const status = searchParams.get('status');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const mob = typeof window !== 'undefined' ? localStorage.getItem('clientMobile') : null;
@@ -17,6 +21,16 @@ export default function CustomerPaymentsPage() {
       router.replace('/login');
     }
   }, [router]);
+
+  useEffect(() => {
+    if (status === 'PAYMENT_SUCCESS') {
+      setMessage('Payment successful!');
+    } else if (status === 'PAYMENT_ERROR') {
+      setMessage('Payment failed. Please try again.');
+    } else if (status) {
+      setMessage(`Payment status: ${status}`);
+    }
+  }, [status]);
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-xl">Loading...</div>;
@@ -37,6 +51,11 @@ export default function CustomerPaymentsPage() {
             Logout
           </button>
         </div>
+        {message && (
+          <div className={`p-4 mb-4 text-center rounded-lg ${status === 'PAYMENT_SUCCESS' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+            {message}
+          </div>
+        )}
         <p className="text-center text-lg mb-10 text-black">
           Choose your preferred payment method and generate professional receipts instantly
         </p>

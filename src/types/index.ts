@@ -19,7 +19,8 @@ export enum PaymentMode {
   CARD = 'card',
   UPI = 'upi',
   NET_BANKING = 'net_banking',
-  WALLET = 'wallet'
+  WALLET = 'wallet',
+  PHONEPE = 'phonepe'
 }
 
 export interface Payment {
@@ -31,6 +32,7 @@ export interface Payment {
   razorpayPaymentId?: string;
   razorpayOrderId?: string;
   razorpaySignature?: string;
+  phonepeTransactionId?: string;
   createdAt: string;
   updatedAt: string;
   user?: User;
