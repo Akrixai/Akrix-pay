@@ -15,6 +15,8 @@ const receiptSchema = z.object({
   customerAddress: z.string().min(1),
   amount: z.number().min(0.01),
   paymentMode: z.string().min(1),
+  serviceType: z.string().min(1),
+  description: z.string().optional(),
 });
 
 function generateReceiptNumber() {
@@ -42,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!parsed.success) {
       return res.status(400).json({ success: false, message: 'Invalid input', errors: parsed.error.errors });
     }
-    const { customerName, customerEmail, customerPhone, customerAddress, amount, paymentMode } = parsed.data;
+    const { customerName, customerEmail, customerPhone, customerAddress, amount, paymentMode, serviceType, description } = parsed.data;
     // Find or create user
     let { data: user, error: userError } = await supabase
       .from('users')
@@ -71,6 +73,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         userId: user.id,
         amount,
         paymentMode,
+        serviceType,
+        description: description || null,
         status: 'completed',
         receiptNumber,
       }])
@@ -98,6 +102,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       customerAddress,
       amount,
       paymentMode,
+      serviceType,
       status: 'completed',
     };
     const pdfBuffer = await generateReceiptPDF(pdfData);
@@ -108,4 +113,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (error: any) {
     return res.status(500).json({ success: false, message: 'Server error', error: error.message });
   }
-} 
+}

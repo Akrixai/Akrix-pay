@@ -21,6 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     customerAddress,
     amount,
     paymentMode,
+    serviceType,
     description,
   } = req.body;
 
@@ -101,7 +102,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     { label: 'Full Name', value: customerName },
     { label: 'Email Address', value: customerEmail },
     { label: 'Phone Number', value: customerPhone },
-    { label: 'Address', value: address }
+    { label: 'Address', value: address },
+    { label: 'Service Type', value: serviceType ? serviceType.charAt(0).toUpperCase() + serviceType.slice(1) : '-' }
   ];
   customerDetails.forEach((detail, index) => {
     const bgColor = index % 2 === 0 ? '#ffffff' : '#f8fafc';

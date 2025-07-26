@@ -11,6 +11,7 @@ export interface ReceiptData {
   customerAddress: string;
   amount: number;
   paymentMode: string;
+  serviceType?: string;
   paymentId?: string;
   orderId?: string;
   status: string;
@@ -134,6 +135,12 @@ export async function generateReceiptPDF(receiptData: ReceiptData): Promise<Buff
     doc.font('Helvetica').fontSize(11).fillColor('#22223b');
     doc.text('Amount:', 350, paymentY); doc.font('Helvetica-Bold').text(`Rs. ${receiptData.amount.toLocaleString('en-IN')}`, 430, paymentY); paymentY += 18;
     doc.font('Helvetica').text('Payment Mode:', 350, paymentY); doc.font('Helvetica-Bold').text(receiptData.paymentMode.toUpperCase(), 430, paymentY); paymentY += 18;
+    if (receiptData.serviceType) {
+      doc.font('Helvetica').text('Service Type:', 350, paymentY); 
+      const serviceType = receiptData.serviceType.charAt(0).toUpperCase() + receiptData.serviceType.slice(1);
+      doc.font('Helvetica-Bold').text(serviceType, 430, paymentY); 
+      paymentY += 18;
+    }
     doc.font('Helvetica').text('Status:', 350, paymentY); doc.font('Helvetica-Bold').text(receiptData.status.toUpperCase(), 430, paymentY); paymentY += 18;
     doc.font('Helvetica').text('Date:', 350, paymentY); doc.font('Helvetica-Bold').text(receiptData.date, 430, paymentY);
 
@@ -164,6 +171,12 @@ export async function generateReceiptPDF(receiptData: ReceiptData): Promise<Buff
     doc.font('Helvetica').fontSize(11).fillColor('#22223b');
     doc.text('Amount:', 350, paymentY); doc.font('Helvetica-Bold').text(`Rs. ${receiptData.amount.toLocaleString('en-IN')}`, 430, paymentY); paymentY += 18;
     doc.font('Helvetica').text('Payment Mode:', 350, paymentY); doc.font('Helvetica-Bold').text(receiptData.paymentMode.toUpperCase(), 430, paymentY); paymentY += 18;
+    if (receiptData.serviceType) {
+      doc.font('Helvetica').text('Service Type:', 350, paymentY); 
+      const serviceType = receiptData.serviceType.charAt(0).toUpperCase() + receiptData.serviceType.slice(1);
+      doc.font('Helvetica-Bold').text(serviceType, 430, paymentY); 
+      paymentY += 18;
+    }
     doc.font('Helvetica').text('Status:', 350, paymentY); doc.font('Helvetica-Bold').text(receiptData.status.toUpperCase(), 430, paymentY); paymentY += 18;
     doc.font('Helvetica').text('Date:', 350, paymentY); doc.font('Helvetica-Bold').text(receiptData.date, 430, paymentY);
 
@@ -177,16 +190,16 @@ export async function generateReceiptPDF(receiptData: ReceiptData): Promise<Buff
 
     // Total Amount Paid box
     doc
-      .roundedRect(40, nextY, doc.page.width - 80, 50, 8)
+      .roundedRect(40, nextY, doc.page.width - 80, 60, 8)
       .fill(accent)
       .stroke(accent);
     doc
       .font('Helvetica-Bold')
       .fontSize(18)
       .fillColor(white)
-      .text('TOTAL AMOUNT PAID', 60, nextY + 15)
+      .text('TOTAL AMOUNT PAID', 60, nextY + 20)
       .fontSize(22)
-      .text(`Rs. ${receiptData.amount.toLocaleString('en-IN')}`, 350, nextY + 10);
+      .text(`Rs. ${receiptData.amount.toLocaleString('en-IN')}`, doc.page.width - 200, nextY + 20, { align: 'right' });
 
     nextY += 70;
     // Thank you message

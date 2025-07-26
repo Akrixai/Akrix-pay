@@ -13,6 +13,7 @@ interface DirectReceiptForm {
   customerAddress: string;
   amount: number;
   paymentMode: string;
+  serviceType: string;
   description?: string;
 }
 
@@ -23,8 +24,12 @@ export function DirectReceiptGenerator() {
   const onSubmit = async (data: DirectReceiptForm) => {
     try {
       setIsGenerating(true);
-      // Ensure amount is a number
-      const payload = { ...data, amount: Number(data.amount) };
+      // Ensure amount is a number and include all fields
+      const payload = { 
+        ...data, 
+        amount: Number(data.amount),
+        serviceType: data.serviceType
+      };
       console.log('📄 Generating direct receipt with data:', payload);
 
       const response = await fetch('/api/receipt/generate', {
@@ -298,6 +303,40 @@ export function DirectReceiptGenerator() {
               animate="visible"
               className="relative"
             >
+              <label htmlFor="serviceType" className="block text-sm font-medium text-black mb-2">
+                Service Type <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <select
+                  {...register('serviceType', { required: 'Service type is required' })}
+                  id="serviceType"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-black"
+                >
+                  <option value="">Select service type</option>
+                  <option value="development">Development</option>
+                  <option value="testing">Testing</option>
+                  <option value="hosting">Hosting</option>
+                  <option value="deployment">Deployment</option>
+                  <option value="maintenance">Maintenance</option>
+                  <option value="updates">Updates</option>
+                  <option value="consultation">Consultation</option>
+                  <option value="training">Training</option>
+                  <option value="support">Support</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              {errors.serviceType && (
+                <p className="mt-1 text-sm text-red-600">{errors.serviceType.message}</p>
+              )}
+            </motion.div>
+            
+            <motion.div
+              custom={7}
+              variants={inputVariants}
+              initial="hidden"
+              animate="visible"
+              className="relative"
+            >
               <label htmlFor="description" className="block text-sm font-medium text-black mb-2">
                 Description (Optional)
               </label>
@@ -313,7 +352,7 @@ export function DirectReceiptGenerator() {
 
           {/* Generate Button */}
           <motion.button
-            custom={7}
+            custom={8}
             variants={inputVariants}
             initial="hidden"
             animate="visible"

@@ -77,4 +77,38 @@ export async function sendPaymentReminderEmail(clientEmail: string, clientName: 
     `,
   };
   await transporter.sendMail(mailOptions);
-} 
+}
+
+export async function sendDirectReceiptEmail(clientEmail: string, clientName: string, amount: number, receiptBuffer: Buffer, receiptNumber: string) {
+  const logoUrl = 'https://akrixai-pay.netlify.app/akrix-logo.png';
+  const mailOptions = {
+    from: smtpUser,
+    to: clientEmail,
+    subject: '🧾 Your Receipt from Akrix',
+    html: `
+      <div style="font-family: Arial, sans-serif; background: #f8fafc; padding: 32px; border-radius: 16px; max-width: 500px; margin: auto;">
+        <div style="text-align: center; margin-bottom: 24px;">
+          <img src='${logoUrl}' alt='Akrix Logo' style='height: 48px; margin-bottom: 8px;' />
+          <h2 style="color: #4f46e5; margin: 0;">Receipt from Akrix</h2>
+        </div>
+        <p style="font-size: 16px; color: #222;">Dear <b>${clientName}</b>,</p>
+        <p style="font-size: 16px; color: #222;">Thank you for your payment of <b>₹${amount.toLocaleString('en-IN')}</b>.</p>
+        <p style="font-size: 16px; color: #222;">Please find your receipt attached to this email. Receipt #: <b>${receiptNumber}</b></p>
+        <p style="font-size: 15px; color: #444; margin-top: 24px;">Thank you for choosing <b>Akrix</b>.<br>- Akrix Team</p>
+        <div style="text-align: center; margin-top: 32px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+          <p style="font-size: 12px; color: #64748b;">
+            <a href="https://akrix-ai.netlify.app/" style="color: #4f46e5; text-decoration: none; font-weight: bold;">Powered by Akrix AI</a>
+          </p>
+        </div>
+      </div>
+    `,
+    attachments: [
+      {
+        filename: `Receipt_${receiptNumber}.pdf`,
+        content: receiptBuffer,
+        contentType: 'application/pdf',
+      },
+    ],
+  };
+  await transporter.sendMail(mailOptions);
+}
