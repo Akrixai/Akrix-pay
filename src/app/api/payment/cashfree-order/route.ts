@@ -139,61 +139,62 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json(
                   { error: 'Failed to find existing user', details: fetchError.message },
                   { status: 500 }
-              );
-            }
+                );
+              }
             
-            if (existingUser) {
-              console.log(`Found existing user with ID: ${existingUser.id} after duplicate email detection`);
-              // Use the existing user's ID
-              userId = existingUser.id;
-              
-              // Update user information
-              const { error: updateError } = await supabase
-                .from('users')
-                .update({
-                  name: validatedData.name,
-                  phone: validatedData.phone,
-                  mobile: validatedData.phone,
-                  address: validatedData.address,
-                  updatedAt: new Date().toISOString(),
-                })
-                .eq('id', userId);
+              if (existingUser) {
+                console.log(`Found existing user with ID: ${existingUser.id} after duplicate email detection`);
+                // Use the existing user's ID
+                userId = existingUser.id;
                 
-              if (updateError) {
-                console.error('Error updating existing user after duplicate detection:', updateError);
+                // Update user information
+                const { error: updateError } = await supabase
+                  .from('users')
+                  .update({
+                    name: validatedData.name,
+                    phone: validatedData.phone,
+                    mobile: validatedData.phone,
+                    address: validatedData.address,
+                    updatedAt: new Date().toISOString(),
+                  })
+                  .eq('id', userId);
+                  
+                if (updateError) {
+                  console.error('Error updating existing user after duplicate detection:', updateError);
+                  return NextResponse.json(
+                    { 
+                      error: 'Failed to update existing user', 
+                      details: updateError.message,
+                      message: 'Found existing user but failed to update their information'
+                    },
+                    { status: 500 }
+                  );
+                }
+                
+                console.log(`Successfully updated existing user: ${userId} after duplicate email detection`);
+              } else {
+                // If we can't find the user despite the duplicate key error
+                console.error('Could not find user despite duplicate email error');
                 return NextResponse.json(
-                  { 
-                    error: 'Failed to update existing user', 
-                    details: updateError.message,
-                    message: 'Found existing user but failed to update their information'
-                  },
+                  { error: 'Failed to create or find user with duplicate email' },
                   { status: 500 }
                 );
               }
-              
-              console.log(`Successfully updated existing user: ${userId} after duplicate email detection`);
             } else {
-              // If we can't find the user despite the duplicate key error
-              console.error('Could not find user despite duplicate email error');
+              // For other types of errors
               return NextResponse.json(
-                { error: 'Failed to create or find user with duplicate email' },
+                { error: 'Failed to create user', details: userError.message },
                 { status: 500 }
               );
             }
-          } else {
-            // For other types of errors
-            return NextResponse.json(
-              { error: 'Failed to create user', details: userError.message },
-              { status: 500 }
-            );
           }
-        }
 
-        // Only set userId from newUser if we actually created a new user
-        // (if we handled a duplicate email error, userId is already set above)
-        if (newUser) {
-          console.log(`Successfully created new user with ID: ${newUser.id}`);
-          userId = newUser.id;
+          // Only set userId from newUser if we actually created a new user
+          // (if we handled a duplicate email error, userId is already set above)
+          if (newUser) {
+            console.log(`Successfully created new user with ID: ${newUser.id}`);
+            userId = newUser.id;
+          }
         }
       } catch (unexpectedError) {
         console.error('Unexpected error during user creation:', unexpectedError);
@@ -368,7 +369,7 @@ export async function POST(request: NextRequest) {
               timeout: 10000, // 10 seconds
             }
           );
-        } catch (error: any) {
+        } catch (error) {
           console.error(`Cashfree API error: ${error.message}`);
           console.error(`Cashfree API error details: ${JSON.stringify(error.response?.data || {})}`);
           
@@ -429,7 +430,7 @@ export async function POST(request: NextRequest) {
       console.log('Returning successful response to client:', JSON.stringify(responseData));
       
       return NextResponse.json(responseData);
-    } catch (error: any) {
+    } catch (error) {
       console.error('Cashfree API error:', error.message);
       console.error('Cashfree API error details:', error.response?.data);
       
@@ -445,7 +446,7 @@ export async function POST(request: NextRequest) {
             })
             .eq('id', payment.id);
         }
-      } catch (updateError: any) {
+      } catch (updateError) {
         console.error('Error updating payment status to failed:', updateError);
       }
       
@@ -470,7 +471,7 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error processing request:', error);
     
     if (error instanceof z.ZodError) {

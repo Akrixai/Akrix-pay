@@ -27,7 +27,7 @@ const PaymentForm = () => {
     
     try {
       // Create order on backend
-      const response = await fetch('/api/create-order', {
+      const response = await fetch('/api/payment/cashfree-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
