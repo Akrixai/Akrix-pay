@@ -27,14 +27,14 @@ export function PaymentFailure({ error, onRetry, onNewPayment }: PaymentFailureP
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center"
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center border border-red-200 dark:border-red-800"
       >
         {/* Error Icon */}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="w-20 h-20 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6"
+          className="w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6"
         >
           <XCircle className="w-12 h-12 text-red-600 dark:text-red-400" />
         </motion.div>
@@ -48,7 +48,7 @@ export function PaymentFailure({ error, onRetry, onNewPayment }: PaymentFailureP
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Payment Failed
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-8">
+          <p className="text-gray-700 dark:text-gray-300 mb-8">
             We encountered an issue while processing your payment. Please try again.
           </p>
         </motion.div>
@@ -58,26 +58,26 @@ export function PaymentFailure({ error, onRetry, onNewPayment }: PaymentFailureP
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="bg-red-50 dark:bg-red-900/20 rounded-lg p-6 mb-8"
+          className="bg-red-50 dark:bg-red-900/30 rounded-lg p-6 mb-8 border border-red-100 dark:border-red-800"
         >
           <h3 className="text-lg font-semibold text-red-900 dark:text-red-100 mb-4">
             Error Details
           </h3>
           <div className="space-y-3 text-left">
             <div className="flex justify-between">
-              <span className="text-red-600 dark:text-red-400">Error Code:</span>
-              <span className="text-red-900 dark:text-red-100 font-mono">
+              <span className="text-red-700 dark:text-red-300 font-medium">Error Code:</span>
+              <span className="text-red-900 dark:text-red-100 font-mono font-bold">
                 {getErrorCode()}
               </span>
             </div>
             <div className="flex flex-col gap-2">
-              <span className="text-red-600 dark:text-red-400">Error Message:</span>
-              <span className="text-red-900 dark:text-red-100 text-sm bg-red-100 dark:bg-red-900/40 p-3 rounded border">
+              <span className="text-red-700 dark:text-red-300 font-medium">Error Message:</span>
+              <span className="text-red-900 dark:text-red-100 text-sm bg-red-100 dark:bg-red-900/50 p-3 rounded border border-red-200 dark:border-red-700">
                 {getErrorMessage()}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-red-600 dark:text-red-400">Time:</span>
+              <span className="text-red-700 dark:text-red-300 font-medium">Time:</span>
               <span className="text-red-900 dark:text-red-100">
                 {new Date().toLocaleString('en-IN')}
               </span>
@@ -90,7 +90,7 @@ export function PaymentFailure({ error, onRetry, onNewPayment }: PaymentFailureP
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-6 mb-8"
+          className="bg-yellow-50 dark:bg-yellow-900/30 rounded-lg p-6 mb-8 border border-yellow-100 dark:border-yellow-800"
         >
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5" />

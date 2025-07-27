@@ -20,7 +20,9 @@ export enum PaymentMode {
   UPI = 'upi',
   NET_BANKING = 'net_banking',
   WALLET = 'wallet',
-  PHONEPE = 'phonepe'
+  PHONEPE = 'phonepe',
+  CASHFREE = 'cashfree',
+  RAZORPAY = 'razorpay'
 }
 
 export interface Payment {
@@ -33,6 +35,12 @@ export interface Payment {
   razorpayOrderId?: string;
   razorpaySignature?: string;
   phonepeTransactionId?: string;
+  // Cashfree specific fields
+  cashfreeOrderId?: string;
+  cashfreePaymentId?: string;
+  cashfreePaymentMethod?: string;
+  cashfreePaymentTime?: string;
+  cashfreePaymentStatus?: string;
   createdAt: string;
   updatedAt: string;
   user?: User;
@@ -65,13 +73,20 @@ export interface PaymentInitiateResponse {
     email: string;
     phone: string;
   };
+  // Cashfree specific fields
+  cf_order_id?: string;
+  payment_session_id?: string;
+  payment_link?: string;
 }
 
 export interface PaymentVerifyRequest {
-  razorpayPaymentId: string;
-  razorpayOrderId: string;
-  razorpaySignature: string;
+  razorpayPaymentId?: string;
+  razorpayOrderId?: string;
+  razorpaySignature?: string;
   paymentId: string;
+  // Cashfree specific fields
+  order_id?: string;
+  order_token?: string;
 }
 
 export interface PaymentVerifyResponse {

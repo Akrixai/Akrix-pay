@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({ success: true, payment: data });
   }
   if (req.method === 'GET') {
-    const { data, error } = await supabase.from('qr_payments').select('*').order('created_at', { ascending: false });
+    const { data, error } = await supabase.from('qr_payments').select('*').order('createdAt', { ascending: false });
     if (error) return res.status(500).json({ success: false, message: error.message });
     return res.status(200).json({ success: true, payments: data });
   }
@@ -54,4 +54,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   res.setHeader('Allow', ['POST', 'GET']);
   res.status(405).end(`Method ${req.method} Not Allowed`);
-} 
+}

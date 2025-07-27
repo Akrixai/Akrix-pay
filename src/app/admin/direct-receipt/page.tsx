@@ -33,6 +33,7 @@ export default function DirectReceiptPage() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    console.log('Form submitted for PDF generation');
     setError('');
     setSuccessMessage('');
     setLoading(true);
@@ -51,6 +52,7 @@ export default function DirectReceiptPage() {
       const a = document.createElement('a');
       a.href = url;
       const receiptNumber = `AKX-${Date.now().toString().slice(-8)}`;
+      console.log('Generated receipt number:', receiptNumber);
       setLastReceiptNumber(receiptNumber);
       a.download = `receipt-${receiptNumber}.pdf`;
       document.body.appendChild(a);
@@ -58,39 +60,52 @@ export default function DirectReceiptPage() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (err: any) {
+      console.error('Error generating PDF:', err);
       setError('Failed to generate receipt. Please try again.');
     }
     setLoading(false);
   };
 
   const handleSendEmail = async () => {
+    console.log('Send Email button clicked');
+    
+    // Prevent sending if no receipt has been generated
     if (!lastReceiptNumber) {
+      console.log('No receipt number found');
       setError('Please generate a receipt first before sending an email.');
       return;
     }
     
+    // Clear previous messages and set loading state
     setError('');
     setSuccessMessage('');
     setSendingEmail(true);
+    console.log('Sending email with form data:', form);
     
     try {
+      // Make API call to send email
       const response = await fetch('/api/admin/send-direct-receipt-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
           amount: Number(form.amount),
+          receiptNumber: lastReceiptNumber, // Include the receipt number
         }),
       });
       
+      console.log('API response status:', response.status);
       const data = await response.json();
+      console.log('API response data:', data);
       
       if (!response.ok) {
         throw new Error(data.message || 'Failed to send email');
       }
       
+      // Show success message
       setSuccessMessage(`Receipt email sent successfully to ${form.customerEmail}`);
     } catch (err: any) {
+      console.error('Error sending email:', err);
       setError(`Failed to send email: ${err.message}`);
     } finally {
       setSendingEmail(false);
@@ -101,7 +116,13 @@ export default function DirectReceiptPage() {
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-yellow-50 via-white to-yellow-100">
       <div className="w-full max-w-xl mx-auto bg-white rounded-3xl shadow-2xl p-8 md:p-12 border border-yellow-200 mt-12 mb-12">
         <h1 className="text-3xl font-bold text-center mb-6 text-yellow-700">Direct Receipt Generation</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form 
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(e);
+          }} 
+          className="space-y-4"
+        >
           <input name="projectName" value={form.projectName} onChange={handleChange} placeholder="Project Name" className="w-full border rounded px-3 py-2 text-black" required />
           <input name="customerName" value={form.customerName} onChange={handleChange} placeholder="Customer Name" className="w-full border rounded px-3 py-2 text-black" required />
           <input name="customerEmail" value={form.customerEmail} onChange={handleChange} placeholder="Customer Email" className="w-full border rounded px-3 py-2 text-black" required />
@@ -144,7 +165,11 @@ export default function DirectReceiptPage() {
             
             <button 
               type="button" 
-              onClick={handleSendEmail}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleSendEmail();
+              }}
               className="flex-1 py-3 rounded-lg font-bold shadow-lg bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 flex items-center justify-center" 
               disabled={sendingEmail || !lastReceiptNumber}
             >
